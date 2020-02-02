@@ -23,6 +23,7 @@ const char* DEFAULT_BACKEND_PORT = "5571";
 const std::regex regex_ip_address(
 		R"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
 		R"((\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})");
+const std::regex regex_port(R"([1-9][0-9]{1,4})"); 
 
 struct BindConfig {
 	const char*	frontend_address;
@@ -69,12 +70,23 @@ bool is_ip_address(const std::string& address)
 	return regex_match(address, regex_ip_address);
 }
 
+bool is_port(const std::string& port)
+{
+	return regex_match(port, regex_port);
+}
+
 inline signed char parse_args(struct BindConfig& config,
 		int argc, char* argv[])
 {
 	// Parse arguments
 	if (argc == 5) {
 		// Set bind and port
+		if (!is_ip_address(argv[1]) ||
+				!is_ip_address(argv[3]) ||
+				!is_port(argv[2]) ||
+				!is_port(argv[4]))
+			return RET_ERROR_REGEX;
+
 		config = BindConfig(
 				argv[1],
 				argv[2],
