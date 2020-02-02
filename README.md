@@ -17,3 +17,8 @@ cd build
 cmake ..
 make
 ```
+
+## License
+This software is licensed under the MIT license.
+The ZeroMQ licensing information can be found under
+http://wiki.zeromq.org/area:licensing.
